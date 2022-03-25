@@ -17,6 +17,10 @@ const CreateBooksRouter = require("./books/router");
 const booksRouter = CreateBooksRouter(db);
 app.use("/books", booksRouter);
 
+const CreatePetsRouter = require("./pets/router");
+const petsRouter = CreatePetsRouter(db);
+app.use("/pets", petsRouter);
+
 //Start the server
 app.listen(port, () => {
   //Connect to the database
@@ -28,9 +32,6 @@ app.listen(port, () => {
       return;
     }
     console.log("\n[DB] Connected...\n");
-    
-
-    
   });
 
   console.log(`[SERVER] Running on http://localhost:${port}/`);

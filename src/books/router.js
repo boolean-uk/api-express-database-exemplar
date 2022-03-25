@@ -7,7 +7,7 @@ const CreateBooksRouter = (db) => {
   router.get("/", async (req, res) => {
     const type = req.query.type || null;
     const books = await getAllBooks(type);
-    res.status(200).json(books);
+    res.status(200).json({books: books});
   });
 
   router.get("/:id", async (req, res) => {
@@ -16,13 +16,13 @@ const CreateBooksRouter = (db) => {
     if (!found) {
       return res.status(404).json({ error: `book not found with id: ${id}` });
     }
-    return res.status(200).json(book);
+    return res.status(200).json({book: book});
   });
 
   router.post("/", async (req, res) => {
     const book = req.body;
     const created = await createBook(book);
-    return res.status(200).json(created)
+    return res.status(200).json({book: created})
   });
 
   return router;
