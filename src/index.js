@@ -8,25 +8,29 @@ app.use(bodyParser.json());
 
 //TODO: Implement books and pets APIs here
 
-
 const port = 3030;
- 
+
 //Get the connection object to the database
 const db = require("./utils/database");
 
+const CreateBooksRouter = require("./books/router");
+const booksRouter = CreateBooksRouter(db);
+app.use("/books", booksRouter);
+
 //Start the server
 app.listen(port, () => {
-
   //Connect to the database
   db.connect((error) => {
-
-    //If there is an error connecting to the database, 
+    //If there is an error connecting to the database,
     //log it out to the console
     if (error) {
       console.error("[ERROR] Connection error: ", error.stack);
-    } else {
-      console.log("\n[DB] Connected...\n");
+      return;
     }
+    console.log("\n[DB] Connected...\n");
+    
+
+    
   });
 
   console.log(`[SERVER] Running on http://localhost:${port}/`);
