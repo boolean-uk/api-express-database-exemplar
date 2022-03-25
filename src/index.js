@@ -1,31 +1,29 @@
-const express = require("express");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const app = express();
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-//TODO: Implement books and pets APIs here
-
+const booksRoutes = require('./routers/books');
+app.use('/books', booksRoutes);
 
 const port = 3030;
- 
+
 //Get the connection object to the database
-const db = require("./utils/database");
+const db = require('./utils/database');
 
 //Start the server
 app.listen(port, () => {
-
   //Connect to the database
   db.connect((error) => {
-
-    //If there is an error connecting to the database, 
+    //If there is an error connecting to the database,
     //log it out to the console
     if (error) {
-      console.error("[ERROR] Connection error: ", error.stack);
+      console.error('[ERROR] Connection error: ', error.stack);
     } else {
-      console.log("\n[DB] Connected...\n");
+      console.log('\n[DB] Connected...\n');
     }
   });
 
