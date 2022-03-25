@@ -45,4 +45,28 @@ router.get('/:id', (req, res) => {
     });
 });
 
+//localhost:3030/books
+router.post('/', (req, res) => {
+  console.log('got post new book request!', req.body);
+  const addBooksQuery =
+    'INSERT INTO books (title,type,author,topic,publicationDate,pages) VALUES($1,$2,$3,$4,$5,$6) RETURNING *';
+  const values = [
+    req.body.title,
+    req.body.type,
+    req.body.author,
+    req.body.topic,
+    req.body.publicationDate,
+    req.body.pages,
+  ];
+  db.query(addBooksQuery, values)
+    .then((databaseResult) => {
+      res.json({ books: databaseResult.rows });
+    })
+    .catch((error) => {
+      res.status(500);
+      res.json({ error: 'Unexpected Error' });
+      console.log('db error', error);
+    });
+});
+
 module.exports = router;
