@@ -5,8 +5,9 @@ const CreatePetsRouter = (db) => {
   const { getAllPets } = createPetsDBFunctions(db);
 
   router.get("/", async (req, res) => {
-    const pets = await getAllPets();
-    res.status(200).json({pets: pets});
+    const type = req.query.type || null;
+    const pets = await getAllPets(type);
+    res.status(200).json({ pets: pets });
   });
 
   return router;
