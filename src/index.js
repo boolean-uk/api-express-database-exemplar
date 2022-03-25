@@ -7,7 +7,9 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 const booksRoutes = require('./routers/books');
+const petsRoutes = require('./routers/pets');
 app.use('/books', booksRoutes);
+app.use('/pets', petsRoutes);
 
 const port = 3030;
 
