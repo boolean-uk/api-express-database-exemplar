@@ -2,7 +2,7 @@ const express = require("express");
 
 const CreatePetsRouter = (db) => {
   const router = express.Router();
-  const { getAllPets, getPetByID } = createPetsDBFunctions(db);
+  const { getAllPets, getPetByID, createPet } = createPetsDBFunctions(db);
 
   router.get("/", async (req, res) => {
     const type = req.query.type || null;
@@ -18,6 +18,12 @@ const CreatePetsRouter = (db) => {
     }
     return res.status(200).json({ pet: pet });
   });
+
+  router.post('/', async (req, res) => {
+      const pet = req.body
+      const created = await createPet(pet)
+      return res.status(200).json({book: created})
+  })
 
   return router;
 };
@@ -51,7 +57,25 @@ const createPetsDBFunctions = (db) => {
     }
   };
 
-  return { getAllPets, getPetByID };
+  const createPet = async (pet) => {
+    let query = `INSERT INTO pets
+                   (name, age, type, breed, microchip)
+                   VALUES ($1, $2, $3, $4, $5) returning *`;
+    try {
+        const res = await db.query(query, [
+            pet.name,
+            pet.age, 
+            pet.type,
+            pet.breed,
+            pet.microchip
+        ])
+        return res.rows[0]
+    }catch(e) {
+        console.error('error inserting new book', e.message)
+    }
+  };
+
+  return { getAllPets, getPetByID, createPet };
 };
 
 module.exports = CreatePetsRouter;
